@@ -9,6 +9,7 @@ import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.PhotoSize;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -49,25 +50,25 @@ public class PhotoBot extends TelegramLongPollingBot {
 				List<KeyboardRow> keyboard = new ArrayList<>();
 				
 				// Create a keyboard row
-				KeyboardRow row = new KeyboardRow();
+				KeyboardRow row1 = new KeyboardRow();
 				// Set each button, you can also use KeyboardButton objects if
 				// you need something else than text
-				row.add("Row 1 Button 1");
-				row.add("Row 1 Button 2");
-				row.add("Row 1 Button 3");
+				row1.add("Row 1 Button 1");
+				row1.add("Row 1 Button 2");
+				row1.add("Row 1 Button 3");
 				
 				// Create another keyboard row
-				row = new KeyboardRow();
+				KeyboardRow row2 = new KeyboardRow();
 				// Set each button for the second line
-				row.add("Row 2 Button 1");
-				row.add("Row 2 Button 2");
-				row.add("Row 2 Button 3");
+				row2.add("Row 2 Button 1");
+				row2.add("Row 2 Button 2");
+				row2.add("Row 2 Button 3");
 				
 				// Add the first row to the keyboard
-				keyboard.add(row);
+				keyboard.add(row1);
 				
 				// Add the second row to the keyboard
-				keyboard.add(row);
+				keyboard.add(row2);
 				
 				// Set the keyboard to the markup
 				keyboardMarkup.setKeyboard(keyboard);
@@ -79,13 +80,28 @@ public class PhotoBot extends TelegramLongPollingBot {
 				} catch (TelegramApiException e) {
 					e.printStackTrace();
 				}
+			} else if( message_text.equals("Row 1 Button 1") ){
+				SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto("AgADBQADBagxGww40FRRvHN3pUH_KMBF1jIABAL6oTLOw2LmyxYBAAEC").setCaption("Photo");
+				
+				try {
+					sendPhoto(msg); // Call method to send the photo
+				} catch (TelegramApiException e) {
+					e.printStackTrace();
+				}
+			} else if( message_text.equals("/hide") ){
+				SendMessage msg = new SendMessage().setChatId(chat_id).setText("Keyboard hidden");
+				ReplyKeyboardRemove keyboardMarkup = new ReplyKeyboardRemove();
+				msg.setReplyMarkup(keyboardMarkup);
+				try {
+					execute(msg); // Call method to send the photo
+				} catch (TelegramApiException e) {
+					e.printStackTrace();
+				}
 			} else {
 				// Unknown command
-				SendMessage message = new SendMessage() // Create a message
-														// object object
-						.setChatId(chat_id).setText("Unknown command");
+				SendMessage message = new SendMessage().setChatId(chat_id).setText("Unknown command");
 				try {
-					sendMessage(message); // Sending our message object to user
+					execute(message);
 				} catch (TelegramApiException e) {
 					e.printStackTrace();
 				}
