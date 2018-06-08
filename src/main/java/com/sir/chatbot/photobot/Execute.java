@@ -3,8 +3,6 @@ package com.sir.chatbot.photobot;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Update;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.exceptions.TelegramApiRequestException;
 
@@ -19,17 +17,8 @@ public class Execute {
 		// Instantiate Telegram Bots API
 		TelegramBotsApi botsApi = new TelegramBotsApi();
 		try {
-			MyAmazingBot myBot = new MyAmazingBot();
-			
-			botsApi.registerBot(new MyAmazingBot());
-			
-			//Send by chatId
-			/*
-			SendMessage message = new SendMessage();
-			message.setChatId("52773309").setText("execute msg");
-//			myBot.sendMessage(message);
-			myBot.execute(message);
-			*/
+			PhotoBot myBot = new PhotoBot();
+			botsApi.registerBot(new PhotoBot());
 			
 			//Send by @channelName
 			SendMessage message = new SendMessage();
