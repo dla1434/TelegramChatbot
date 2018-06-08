@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class PhotoBot extends TelegramLongPollingBot {
+	String recentPhotoFileId = null;
+	
 	@Override
 	public void onUpdateReceived(Update update) {
 		// We check if the update has a message and the message has text
@@ -34,7 +36,7 @@ public class PhotoBot extends TelegramLongPollingBot {
 					e.printStackTrace();
 				}
 			} else if (message_text.equals("/pic")) {
-				SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto("AgADBQADBagxGww40FRRvHN3pUH_KMBF1jIABAL6oTLOw2LmyxYBAAEC").setCaption("Photo");
+				SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto(recentPhotoFileId).setCaption("Photo");
 				try {
 					sendPhoto(msg); // Call method to send the photo
 				} catch (TelegramApiException e) {
@@ -81,7 +83,7 @@ public class PhotoBot extends TelegramLongPollingBot {
 					e.printStackTrace();
 				}
 			} else if( message_text.equals("Row 1 Button 1") ){
-				SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto("AgADBQADBagxGww40FRRvHN3pUH_KMBF1jIABAL6oTLOw2LmyxYBAAEC").setCaption("Photo");
+				SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto(recentPhotoFileId).setCaption("Photo");
 				
 				try {
 					sendPhoto(msg); // Call method to send the photo
@@ -114,6 +116,7 @@ public class PhotoBot extends TelegramLongPollingBot {
 			
 			//Know file_id
 			String f_id = photos.stream().sorted(Comparator.comparing(PhotoSize::getFileSize).reversed()).findFirst().orElse(null).getFileId();
+			recentPhotoFileId = f_id;
 			
 			//Know photo width
 			int f_width = photos.stream().sorted(Comparator.comparing(PhotoSize::getFileSize).reversed()).findFirst().orElse(null).getWidth();
@@ -123,6 +126,7 @@ public class PhotoBot extends TelegramLongPollingBot {
 			
 			// Set photo caption
 			String caption = "file_id: " + f_id + "\nwidth: " + Integer.toString(f_width) + "\nheight: " + Integer.toString(f_height);
+			
 			SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto(f_id).setCaption(caption);
 			
 			try {
