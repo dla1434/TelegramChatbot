@@ -18,17 +18,35 @@ public class PhotoBot extends TelegramLongPollingBot {
 	public void onUpdateReceived(Update update) {
 		// We check if the update has a message and the message has text
 		if (update.hasMessage() && update.getMessage().hasText()) {
-			// Set variables
 			String message_text = update.getMessage().getText();
 			long chat_id = update.getMessage().getChatId();
-			SendMessage message = new SendMessage();			// Create a message object
-			message.setChatId(chat_id).setText(message_text);	// object
-					
-			try {
-				execute(message); // Sending our message object to user
-			} catch (TelegramApiException e) {
-				e.printStackTrace();
-				log.error("TelegramApiException : ", e);
+			
+			//response user's input msg
+			if (message_text.equals("/start")) {
+				SendMessage message = new SendMessage().setChatId(chat_id).setText(message_text);
+				try {
+					execute(message);
+				} catch (TelegramApiException e) {
+					e.printStackTrace();
+				}
+			//
+			} else if (message_text.equals("/pic")) {
+				SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto("AgADBQADBagxGww40FRRvHN3pUH_KMBF1jIABAL6oTLOw2LmyxYBAAEC").setCaption("Photo");
+				try {
+					sendPhoto(msg); // Call method to send the photo
+				} catch (TelegramApiException e) {
+					e.printStackTrace();
+				}
+			} else {
+				// Unknown command
+				SendMessage message = new SendMessage() // Create a message
+														// object object
+						.setChatId(chat_id).setText("Unknown command");
+				try {
+					sendMessage(message); // Sending our message object to user
+				} catch (TelegramApiException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		else if( update.hasMessage() && update.getMessage().hasPhoto() ){
