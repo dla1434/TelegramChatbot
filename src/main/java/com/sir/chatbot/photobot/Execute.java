@@ -16,14 +16,12 @@ public class Execute {
 
 		// Instantiate Telegram Bots API
 		TelegramBotsApi botsApi = new TelegramBotsApi();
-		try {
+		
+		try
+		{
 			PhotoBot myBot = new PhotoBot();
 			botsApi.registerBot(new PhotoBot());
 			
-			//Send by @channelName
-			SendMessage message = new SendMessage();
-			message.setChatId("@sri_gram_test").setText("channel msg");
-			myBot.execute(message);
 		} catch (TelegramApiRequestException e) {
 			log.error("TelegramApiRequestException : ", e);
 			e.printStackTrace();
