@@ -13,6 +13,8 @@ import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import com.vdurmont.emoji.EmojiParser;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -31,7 +33,7 @@ public class EmojiBot extends TelegramLongPollingBot {
 				if (message_text.equals("/start")) {
 					SendMessage message = new SendMessage().setChatId(chat_id).setText(message_text);
 					execute(message);
-				} else if (message_text.equals("/who am i")) {
+				} else if (message_text.equals("/emoji")) {
 					// Set variables
 					String user_first_name = update.getMessage().getChat().getFirstName();
 					String user_last_name = update.getMessage().getChat().getLastName();
@@ -40,40 +42,18 @@ public class EmojiBot extends TelegramLongPollingBot {
 					
 					String infoMsg = log(user_first_name, user_last_name, Long.toString(user_id), message_text, message_text);
 					
-					SendMessage message = new SendMessage().setChatId(chat_id).setText(infoMsg);
+					SendMessage message = new SendMessage().setChatId(chat_id);
+					message.setText(infoMsg);
+					execute(message);
+					
+					String emojiAnswer = EmojiParser.parseToUnicode("Here is a smile emoji: :smile:\n\n Here is alien emoji: :alien:");
+					message.setText(emojiAnswer);
 					execute(message);
 				} 
 			} catch (TelegramApiException e) {
 				log.error("TelegramApiException : ", e);
 			} catch (Exception e){
 				log.error("Exception : ", e);
-			}
-		}
-		else if( update.hasMessage() && update.getMessage().hasPhoto() ){
-			long chat_id = update.getMessage().getChatId();
-			
-			List<PhotoSize> photos = update.getMessage().getPhoto();
-			
-			//Know file_id
-			String f_id = photos.stream().sorted(Comparator.comparing(PhotoSize::getFileSize).reversed()).findFirst().orElse(null).getFileId();
-			recentPhotoFileId = f_id;
-			
-			//Know photo width
-			int f_width = photos.stream().sorted(Comparator.comparing(PhotoSize::getFileSize).reversed()).findFirst().orElse(null).getWidth();
-
-			//Know photo height
-			int f_height = photos.stream().sorted(Comparator.comparing(PhotoSize::getFileSize).reversed()).findFirst().orElse(null).getHeight();
-			
-			// Set photo caption
-			String caption = "file_id: " + f_id + "\nwidth: " + Integer.toString(f_width) + "\nheight: " + Integer.toString(f_height);
-			
-			SendPhoto msg = new SendPhoto().setChatId(chat_id).setPhoto(f_id).setCaption(caption);
-			
-			try {
-				//Call method to send the photo with caption
-				sendPhoto(msg); 
-			} catch (TelegramApiException e) {
-				e.printStackTrace();
 			}
 		}
 	}
