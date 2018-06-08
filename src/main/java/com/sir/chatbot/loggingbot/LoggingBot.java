@@ -98,8 +98,8 @@ public class LoggingBot extends TelegramLongPollingBot {
 		Date date = new Date();
 		
 		sb.append("\n ---------------------------- log ----------------------------")
-			.append(dateFormat.format(date))
-			.append("Message from " + first_name + " " + last_name + ". (id = " + user_id + ") \n Text - " + txt)
+			.append(dateFormat.format(date)).append("\r\n")
+			.append("Message from " + first_name + " " + last_name + ". (id = " + user_id + ") \n Text - " + txt).append("\r\n")
 			.append("Bot answer: \n Text - " + bot_answer);
 			
 		log.info(sb.toString());
