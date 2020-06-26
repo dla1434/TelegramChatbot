@@ -1,17 +1,15 @@
-package com.sir.chatbot;
+package com.sir.chatbot.msgBot;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @Slf4j
-public class ChatbotApplication {
+public class Execute {
 
 	public static void main(String[] args) {
 //		SpringApplication.run(ChatbotApplication.class, args);
@@ -24,7 +22,7 @@ public class ChatbotApplication {
 		
 		// Register our bot
 		try {
-			botsApi.registerBot(new MyAmazingBot());
+			botsApi.registerBot(new MsgSendBot());
 		} 
 		catch (TelegramApiException e) {
 			e.printStackTrace();
